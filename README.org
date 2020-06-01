@@ -63,7 +63,7 @@ path = [HARDENED_INDEX+1]
 path = "m/1"
 #+END_SRC
 
-*** Hardended child
+*** Hardened child
 
 #+BEGIN_SRC python :results silent raw
 path = "m/1'"
