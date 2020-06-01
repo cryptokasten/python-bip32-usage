@@ -1,0 +1,178 @@
+#+TITLE: Python bip32 usage
+#+OPTIONS: ^:nil
+#+PROPERTY: header-args:sh :session *shell python-bip32-usage sh* :results silent raw
+#+PROPERTY: header-args:python :session *shell python-bip32-usage python* :results replace code
+
+** System environment
+
+** Install requirements
+
+#+BEGIN_SRC sh
+pip install bip32
+#+END_SRC
+
+** Imports
+
+#+BEGIN_SRC python :results silent raw
+from bip32 import BIP32, HARDENED_INDEX
+#+END_SRC
+
+** Initialize master key
+*** From seed
+
+From mnemonic seed.
+
+#+BEGIN_SRC python :results silent raw
+masterkey = BIP32.from_seed(bytes.fromhex("f813c6b2d9ce36eac57e9954471d75d287e385ce8d8193a7780d1c2919d0fede"), network="test")
+#+END_SRC
+
+*** From xpriv
+
+#+BEGIN_SRC python :results silent raw
+masterkey = BIP32.from_xpriv("tprv8ZgxMBicQKsPfLqpm9iFzu7cTV2sU9o6aB9BUW66rPSNjJaozmmY9WbzLCo1fLzJMjh2z9hiL7nKCHjutuq7ps5v8m1gkv2KDWSDX3RvwCG")
+#+END_SRC
+
+*** From xpub
+
+#+BEGIN_SRC python :results silent raw
+masterkey = BIP32.from_xpub("tpubD6NzVbkrYhZ4YosceoNrQJmj2WYodUz19Ujxm28QGfEmZnqadAb8L1DrWMx6b3icdo8Zg7cPEzYhWzryeeFwumu3WU1JUwy9aBuDZ2ktyXQ")
+#+END_SRC
+
+** Path
+*** Self
+
+#+BEGIN_SRC python :results silent raw
+path = "m"
+#+END_SRC
+
+*** As a list
+
+#+BEGIN_SRC python :results silent raw
+path = [1]
+#+END_SRC
+
+*** As a list with HARDENED_INDEX
+
+#+BEGIN_SRC python :results silent raw
+path = [HARDENED_INDEX+1]
+#+END_SRC
+
+*** Usual m/the/path/ index
+
+#+BEGIN_SRC python :results silent raw
+path = "m/1"
+#+END_SRC
+
+*** Hardended child
+
+#+BEGIN_SRC python :results silent raw
+path = "m/1'"
+#+END_SRC
+
+or
+
+#+BEGIN_SRC python :results silent raw
+path = "m/1h"
+#+END_SRC
+
+or
+
+#+BEGIN_SRC python :results silent raw
+path = "m/1H"
+#+END_SRC
+
+** Get extended privkey from path
+
+#+BEGIN_SRC python
+chain_code, secret_exponent = masterkey.get_extended_privkey_from_path(path)
+chain_code.hex(), secret_exponent.hex()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+('a7083464bd1d3e7cb9e1a37a5fac59d768bbea2ddcc06d68db75727a69203334', '167f38fec0577b4fb9ac4a89e3ccff09546778014f28fb150715174dd70ba175')
+#+end_src
+
+** Get privkey from path
+
+#+BEGIN_SRC python
+masterkey.get_privkey_from_path(path).hex()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+167f38fec0577b4fb9ac4a89e3ccff09546778014f28fb150715174dd70ba175
+#+end_src
+
+** Get extended pubkey from path
+
+#+BEGIN_SRC python
+chain_code, key_pair_as_sec = masterkey.get_extended_pubkey_from_path(path)
+chain_code.hex(), key_pair_as_sec.hex()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+('a7083464bd1d3e7cb9e1a37a5fac59d768bbea2ddcc06d68db75727a69203334', '039f589caf8cc3035c1e6385968391ceb3f300af853678d2926204ab366f24ac0a')
+#+end_src
+
+** Get pubkey from path
+
+#+BEGIN_SRC python
+masterkey.get_pubkey_from_path(path).hex()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+039f589caf8cc3035c1e6385968391ceb3f300af853678d2926204ab366f24ac0a
+#+end_src
+
+** Get xpriv from path
+
+#+BEGIN_SRC python
+masterkey.get_xpriv_from_path(path)
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+tprv8cDawHNgJ3KQS3XFn4ABzPFtLHsHtyCnfnUX6mGDaiMXXy9AkkDaDr7AFVZgGFS7izpPiLW1xZptv9sx3Rafy2bCTbVWhw3J1Kuhmz5fL44
+#+end_src
+
+** Get xpub from path
+
+#+BEGIN_SRC python
+masterkey.get_xpub_from_path(path)
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+tpubD8ud5hQvSR15KWZ3fhpnPnuzuKPE4JPhF65JPHJWzz9vNTPwP93AQLj2RfVb2hzUFaW9vACviTouzGYHaK2yaZb86Vj4oDAPUM29S6E76GQ
+#+end_src
+
+** Get master xpriv
+
+#+BEGIN_SRC python
+masterkey.get_master_xpriv()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+tprv8ZgxMBicQKsPfLqpm9iFzu7cTV2sU9o6aB9BUW66rPSNjJaozmmY9WbzLCo1fLzJMjh2z9hiL7nKCHjutuq7ps5v8m1gkv2KDWSDX3RvwCG
+#+end_src
+
+** Get master xpub
+
+#+BEGIN_SRC python
+masterkey.get_master_xpub()
+#+END_SRC
+
+#+RESULTS:
+#+begin_src python
+tpubD6NzVbkrYhZ4YosceoNrQJmj2WYodUz19Ujxm28QGfEmZnqadAb8L1DrWMx6b3icdo8Zg7cPEzYhWzryeeFwumu3WU1JUwy9aBuDZ2ktyXQ
+#+end_src
+
+** References
+
+- https://github.com/darosior/python-bip32
+
+- https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
