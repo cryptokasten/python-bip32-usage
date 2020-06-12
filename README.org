@@ -23,7 +23,9 @@ from bip32 import BIP32, HARDENED_INDEX
 From mnemonic seed.
 
 #+BEGIN_SRC python :results silent raw
-masterkey = BIP32.from_seed(bytes.fromhex("f813c6b2d9ce36eac57e9954471d75d287e385ce8d8193a7780d1c2919d0fede"), network="test")
+seed_hex = "b5cf116d11d4338b1a5d0971ba1fe40d19d360d7f6014c7a6fc8925fd1e18aaa8d539c5756f06e57bfc24c74a3641c93af9553d907d6dd66f791d4e86d190840"
+network = "test"
+masterkey = BIP32.from_seed(bytes.fromhex(seed_hex), network=network)
 #+END_SRC
 
 *** From xpriv
@@ -66,7 +68,7 @@ path = "m/1"
 *** Hardened child
 
 #+BEGIN_SRC python :results silent raw
-path = "m/1'"
+path = "m/1'/1'"
 #+END_SRC
 
 or
@@ -90,7 +92,7 @@ chain_code.hex(), secret_exponent.hex()
 
 #+RESULTS:
 #+begin_src python
-('a7083464bd1d3e7cb9e1a37a5fac59d768bbea2ddcc06d68db75727a69203334', '167f38fec0577b4fb9ac4a89e3ccff09546778014f28fb150715174dd70ba175')
+('d2f88eab271242b8ce9418c7ef88112e9c23c7764aaef30f456da0c4492eaab9', '1cb319caf137479e8bdef3ff161895fff9db693f03f5f4f4ad73b74e5ebbcbc7')
 #+end_src
 
 ** Get privkey from path
@@ -101,7 +103,7 @@ masterkey.get_privkey_from_path(path).hex()
 
 #+RESULTS:
 #+begin_src python
-167f38fec0577b4fb9ac4a89e3ccff09546778014f28fb150715174dd70ba175
+c23be917c1fc6b890e5a08bf8aa8b3129544ad53e40afa09af17df3a33138f5d
 #+end_src
 
 ** Get extended pubkey from path
